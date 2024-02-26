@@ -1,6 +1,62 @@
 請幫我把以下 JS 寫成的程式改成 jquery 的寫法
 
-<body>
+<!DOCTYPE html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VScode test02</title>
+
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+      }
+      :root {
+        --font-size: 1.2rem;
+        --border-radius: 6px;
+      }
+      h1 {
+        font-size: 3rem;
+        text-align: center;
+        margin: 30px 0;
+      }
+      .box {
+        /* border: 1px solid red; */
+        width: 100%;
+        text-align: center;
+      }
+      input {
+        width: 20%;
+        padding: 15px;
+        margin-right: 10px;
+        color: rgb(3, 141, 104);
+        font-weight: 400;
+        border-radius: var(--border-radius);
+        font-size: var(--font-size);
+      }
+      #checkBtn {
+        padding: 10px;
+        margin-left: 10px;
+        border-radius: var(--border-radius);
+        font-size: var(--font-size);
+        background-color: #0fb;
+        transition: all 0.5s ease;
+      }
+      #checkBtn:hover {
+        cursor: pointer;
+        background-color: #0bf;
+      }
+      #result {
+        margin: 20px 0;
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: red;
+      }
+    </style>
+  </head>
+  <body>
     <h1>身份ID檢核</h1>
     <div class="box">
       <input type="text" id="idInput" placeholder="請輸入檢測ID" />
@@ -224,3 +280,4 @@
       }
     </script>
   </body>
+</html>
