@@ -1,1 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VScode test02</title>
 
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+    }
+    :root {
+      --font-size: 1.2rem;
+      --border-radius: 6px;
+    }
+    h1 {
+      font-size: 3rem;
+      text-align: center;
+      margin: 30px 0;
+    }
+    .box {
+      width: 100%;
+      text-align: center;
+    }
+    input {
+      width: 20%;
+      padding: 15px;
+      margin-right: 10px;
+      color: rgb(3, 141, 104);
+      font-weight: 400;
+      border-radius: var(--border-radius);
+      font-size: var(--font-size);
+    }
+    #checkBtn {
+      padding: 10px;
+      margin-left: 10px;
+      border-radius: var(--border-radius);
+      font-size: var(--font-size);
+      background-color: #0fb;
+      transition: all 0.5s ease;
+    }
+    #checkBtn:hover {
+      cursor: pointer;
+      background-color: #0bf;
+    }
+    #result {
+      margin: 20px 0;
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <h1>身份ID檢核</h1>
+  <div class="box">
+    <input type="text" id="idInput" placeholder="請輸入檢測ID" />
+    <button id="checkBtn">檢查</button>
+    <p id="result"></p>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      // Focus 輸入框
+      $("#idInput").focus();
+
+      // 按下 Enter 輸入框
+      $("#idInput").keydown(function(e) {
+        if (e.key === "Enter") {
+          checkID();
+        }
+      });
+
+      // click 按鈕
+      $("#checkBtn").click(function() {
+        checkID();
+      });
+
+      let checkID = function () {
+        $("#result").text("");
+        let id = $("#idInput").val();
+
+        // 城市地區 英文轉換數字
+        const cityCode = {
+          A: 10, B: 11, C: 12, D: 13, E: 14, F: 15, G: 16, H: 17, J: 18,
+          K: 19, L: 20, M: 21, N: 22, P: 23, Q: 24, R: 25, S: 26, T: 27,
+          U: 28, V: 29, X: 30, Y: 31, W: 32, Z: 33, I: 34, O: 35
+        };
+
+        if (id.match(/^[0-9]{8}$/)) {
+          // 公司統編
+          let companySum = 0;
+
+          for (let i = 0; i < id.length; i++) {
+            let companyDigit = parseInt(id[i]);
+            if (i % 2 === 0 && i < 5) {
+              companyDigit *= 1;
+            } else if (i % 2 === 1 && i < 6) {
+              companyDigit *= 2;
+              companyDigit = (companyDigit % 10) + Math.floor(companyDigit / 10);
+            } else if (i === 6) {
+              companyDigit *= 4;
+              companyDigit = (companyDigit % 10) + Math.floor(companyDigit / 10);
+            } else if (i === 7) {
+              companyDigit *= 1;
+            }
+            companySum += companyDigit;
+          }
+
+          // 第 7 位數為 7 時
+          let sevenComNum = parseInt(id[6]);
+          if (sevenComNum === 7) {
+            if ((companySum + 1) % 10 === 0 || companySum % 10 === 0) {
+              $("#result").text("輸入符合法人統編類且符合規定");
+            } else {
+              $("#result").text("編碼為法人統編類，但編碼不符合規定");
+            }
+          } else {
+            if (companySum % 10 === 0) {
+              $("#result").text("輸入符合法人統編類
