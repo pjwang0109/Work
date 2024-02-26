@@ -1,68 +1,226 @@
-JAVA測驗（實作題）
+請幫我把以下 JS 寫成的程式改成 jquery 的寫法
 
-實作帳號產生程式，由使用者輸入起始帳號（11位數字)及產生的帳號數，算出檢核碼，顯示完整的12位帳號及將產生的帳號寫成文字檔，若輸入資料有問題顯示對應的錯誤訊息。
-例如：
-Input:
-起始帳號：00150123456
-帳號數：3
-Output:(?為計算出的檢查碼)
-00150123456?
-00150123457?
-00150123458?
+<body>
+    <h1>身份ID檢核</h1>
+    <div class="box">
+      <input type="text" id="idInput" placeholder="請輸入檢測ID" />
+      <button id="checkBtn">檢查</button>
+      <p id="result"></p>
+    </div>
 
-檢查碼公式如下：
-帳號:
-(一)長度:共有21位，全為數字
-D1 D2 D3 D4 D5 D6 D7 D8 D9 D10 D11 Z
-D1D2D3:分行別
-D4D5:科目別
-D6D7D8D9D10D11:流水號
-Z:檢查碼
+    <script>
+      // Focus 輸入框
+      document.querySelector("#idInput").focus();
 
-(二)計算公式: 
-(a) 科目為20或分行代號為 001-007 且科目30、40、66以6位做檢核左邊數字補0 -> "00000D6D7D8D9D10D11"
-(b) 非(a)項條件，其他所有帳號以12作檢核
-(c) 各數字分別乘上 5、4、3、2、8、7、6、5、4、3、2
-(d) Y = (D1*5) + (D2*4) + (D3*3) + (D4*2) + (D5*8) + (D6*7) + (D7*6) + (D8*5) + (D9*4) + (D10*3) + (D11*2) 
-(e) X = Y // 11 取餘數
-(f) X = 0 -> Z = 1 
-    X = 1 -> Z = 0
-    X 不等於0或1 -> Z = 11-X 
+      let checkID = function () {
+        document.querySelector("#result").innerText = "";
+        let id = document.querySelector("#idInput").value;
 
-(三)備註: 外匯綜存帳號流水號 D6-D11，D6 第1碼須為5開始 
+        // 城市地區 英文轉換數字
+        const cityCode = {
+          A: 10,
+          B: 11,
+          C: 12,
+          D: 13,
+          E: 14,
+          F: 15,
+          G: 16,
+          H: 17,
+          J: 18,
+          K: 19,
+          L: 20,
+          M: 21,
+          N: 22,
+          P: 23,
+          Q: 24,
+          R: 25,
+          S: 26,
+          T: 27,
+          U: 28,
+          V: 29,
+          X: 30,
+          Y: 31,
+          W: 32,
+          Z: 33,
+          I: 34,
+          O: 35,
+        };
 
-程式需檢核項目：
-1.	輸入起始帳號長度需為11碼。若不是回覆＂起始帳號長度錯誤＂。
-2.	輸入起始帳號需為數字。若不是回覆＂起始帳號需為數字＂。
-3.	分行別需為001-099,不得為019。若錯誤回覆”分行別錯誤”。
-4.	科目需為10 20 30 40 50 51 66 77 88。若不是回覆＂科目別錯誤”。
-5.	帳號數為01-9999組。若不是回覆＂帳號數錯誤＂。
+        if (id.match(/^[0-9]{8}$/)) {
+          // 公司統編
+          let companySum = 0;
 
+          for (let i = 0; i < id.length; i++) {
+            let companyDigit = parseInt(id[i]);
+            if (i % 2 === 0 && i < 5) {
+              companyDigit *= 1;
+            } else if (i % 2 === 1 && i < 6) {
+              companyDigit *= 2;
+              companyDigit =
+                (companyDigit % 10) + Math.floor(companyDigit / 10);
+            } else if (i === 6) {
+              companyDigit *= 4;
+              companyDigit =
+                (companyDigit % 10) + Math.floor(companyDigit / 10);
+            } else if (i === 7) {
+              companyDigit *= 1;
+            }
+            companySum += companyDigit;
+          }
 
-帳號:
-002300001473	
-002400000001	
-002408098760	
-002500000120	
-002500462018	
-002500666748	
-002500666993	
-002500667035	
-002500667051	
-002500667124	
-002500667329	
-002500987650	
-002500998741	
-002500999984	
-002501234566	
-002501478252	
-002502111115	
-002504222224	
-002505428888	
-002505428969	
-002507000001	
-002507000010	
-002507854787	
-039502002812	
-091400123452	
-091500123451	
+          // 第 7 位數為 7 時
+          let sevenComNum = parseInt(id[6]);
+          if (sevenComNum === 7) {
+            if ((companySum + 1) % 10 === 0 || companySum % 10 === 0) {
+              document.querySelector("#result").innerText =
+                "輸入符合法人統編類且符合規定";
+              console.log(companySum);
+            } else {
+              document.querySelector("#result").innerText =
+                "編碼為法人統編類，但編碼不符合規定";
+              console.log(companySum);
+            }
+          } else {
+            if (companySum % 10 === 0) {
+              document.querySelector("#result").innerText =
+                "輸入符合法人統編類且符合規定";
+              console.log(companySum);
+            } else {
+              document.querySelector("#result").innerText =
+                "編碼為法人統編類，但編碼不符合規定";
+            }
+          }
+        } else if (id.match(/^[A-Z][12][0-9]{8}$/)) {
+          // 身份證檢碼
+          const firstIdEn = id.charAt(0);
+          const otherIdNum = id.substring(1, 9);
+          const genderNum = id.charAt(1);
+
+          let idSum =
+            (cityCode[firstIdEn] % 10) * 9 +
+            Math.floor(cityCode[firstIdEn] / 10);
+          for (let i = 0; i < otherIdNum.length; i++) {
+            idSum += parseInt(otherIdNum.charAt(i)) * (8 - i);
+          }
+
+          const remainderId = idSum % 10;
+          const checkLastNum = remainderId === 0 ? 0 : 10 - remainderId;
+
+          if (checkLastNum === parseInt(id.charAt(9))) {
+            document.querySelector("#result").innerText =
+              "輸入符合個人身份證字號類且檢碼正確";
+          } else {
+            document.querySelector("#result").innerText =
+              "編碼為個人身份證字號類，檢核碼錯誤，正確檢核碼為" + checkLastNum;
+          }
+        } else if (id.match(/^[0-9]{8}[A-Z]{2}$/)) {
+          // 外國人稅籍編號
+          const foreignerYearNum = id.substring(0, 4);
+          const foreignerMoonNum = id.substring(4, 6);
+          const foreignerDayNum = id.substring(6, 8);
+
+          let correctDate = new Date(); // 目前的日期
+          let correctYear = correctDate.getFullYear();
+
+          if (
+            foreignerYearNum <= correctYear &&
+            foreignerMoonNum <= 12 &&
+            foreignerDayNum <= 31
+          ) {
+            document.querySelector("#result").innerText =
+              "輸入符合外國人稅籍編號類且檢碼正確";
+          } else {
+            document.querySelector("#result").innerText =
+              "不符合任何種類(長度錯誤，編碼方式錯誤...)";
+          }
+        } else if (id.match(/^[A-Z][A-D]\d{8}$/)) {
+          // 外國人統一證號
+
+          let uniteFirstNum = id.charAt(0); // F
+          let uniteSecondNum = id.charAt(1); // A
+          let uniteOtherNum = id.substring(2, 9); // 12345689
+
+          let newFirstUniteNum = Math.floor(cityCode[uniteFirstNum] / 10); // F ==> 1
+          let newSecondUniteNum = cityCode[uniteFirstNum] % 10; // F ==> 5
+          let newThirdUniteNum = cityCode[uniteSecondNum] % 10; // A ==> 0
+
+          // 轉換成新證號 ==> 1501234568
+          let newUniteNum = `${newFirstUniteNum}${newSecondUniteNum}${newThirdUniteNum}${uniteOtherNum}`;
+
+          let uniteFirstSum = parseInt(newUniteNum[0]); // 1
+          for (let i = 1; i < newUniteNum.length; i++) {
+            let everyUniteNum = (parseInt(newUniteNum[i]) * (10 - i)) % 10;
+            uniteFirstSum += everyUniteNum;
+          }
+
+          let remainderUniteId = uniteFirstSum % 10;
+          let checkLastUniteNum =
+            remainderUniteId === 0 ? 0 : 10 - remainderUniteId;
+
+          if (checkLastUniteNum === parseInt(id.charAt(9))) {
+            document.querySelector("#result").innerText =
+              "輸入符合外國人統一證號類且檢碼正確";
+          } else {
+            document.querySelector("#result").innerText =
+              "輸入符合外國人統一證號類，檢核碼錯誤，正確檢核碼為" +
+              checkLastUniteNum;
+          }
+        } else if (id.match(/^[A-Z][89][0-9]{8}$/)) {
+          // 新式外國人統一證號
+
+          let newStyleFirstNum = id.charAt(0); // A
+          let newStyleOtherNum = id.substring(1, 9); // 80000001
+
+          let styleFirstNum = Math.floor(cityCode[newStyleFirstNum] / 10); // A ==> 1
+          let styleSecondNum = cityCode[newStyleFirstNum] % 10; // A ==> 0
+
+          // A80000001 轉換成新證號 ==> 1080000001
+          let newStyleNum = `${styleFirstNum}${styleSecondNum}${newStyleOtherNum}`;
+
+          let styleFirstSum = parseInt(newStyleNum[0]); // 1
+          for (let i = 1; i < newStyleNum.length; i++) {
+            let everyStyleNum = (parseInt(newStyleNum[i]) * (10 - i)) % 10;
+            styleFirstSum += everyStyleNum; // styleFirstSum ==> 6
+          }
+
+          let remainderStyleId = styleFirstSum % 10;
+          let checkLastStyleNum =
+            remainderStyleId === 0 ? 0 : 10 - remainderStyleId;
+
+          if (checkLastStyleNum === parseInt(id.charAt(9))) {
+            document.querySelector("#result").innerText =
+              "輸入符合外國人統一證號類且檢碼正確";
+          } else {
+            document.querySelector("#result").innerText =
+              "輸入符合外國人統一證號類，檢核碼錯誤，正確檢核碼為" +
+              checkLastStyleNum;
+          }
+
+          // document.querySelector("#result").innerText = "新式外國人統一證號";
+        } else {
+          document.querySelector("#result").innerText =
+            "不符合任何種類(長度錯誤，編碼方式錯誤...)";
+        }
+      };
+
+      // 按下 Enter 輸入框
+      let enterInput = document
+        .querySelector("#idInput")
+        .addEventListener("keydown", handlerEnter);
+
+      function handlerEnter(e) {
+        if (e.key === "Enter") {
+          checkID();
+        }
+      }
+
+      // click 按鈕
+      let clickBtn = document
+        .querySelector("#checkBtn")
+        .addEventListener("click", handlerClick);
+
+      function handlerClick() {
+        checkID();
+      }
+    </script>
+  </body>
