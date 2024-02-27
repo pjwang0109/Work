@@ -1,4 +1,4 @@
-想讓以下這段改用 jquery ，要怎麼寫?
+原本這段是用JS寫的，想讓以下這段改用 jquery 要怎麼寫?
 
 let checkID = function () {
           $("#result").innerText = "";
