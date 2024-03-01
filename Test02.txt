@@ -1,8 +1,63 @@
-要讓 <p id="result"></p> 生出文字 'ABC'，使用 jquery 要怎麼做?
-  <body>
-    <div class="box">
-      <input type="text" id="idInput" placeholder="請輸入檢測ID" />
-      <button id="checkBtn">檢查</button>
-      <p id="result"></p>
-    </div>
-  </body>
+let produceID = function () {
+    // 起始帳號
+    let startId = $("#startAccount").val();
+
+    // 分行別
+    let bankCode = startId.substring(0, 3);
+
+    // 科目
+    let subject = startId.substring(3, 5);
+
+    // 帳號數
+    let amountId = parseInt($("#accountCount").val());
+
+    // 11碼中，最後6個數字
+    let lastSixNum = startId.substring(5, 11);
+
+    // 生成帳號
+    let resultID = "";
+    for (let i = 0; i < amountId; i++) {
+        let newAccount = parseInt(lastSixNum) + i;
+        let newAccountStr = String(newAccount).padStart(6, '0');
+        let currentAccount = bankCode + subject + newAccountStr;
+        let checkDigit = calc(currentAccount);
+        resultID += currentAccount + checkDigit + "<br/>";
+    }
+
+    $("#result").html(resultID);
+};
+
+// 计算检验位
+function calc(AC) {
+    let validSubject = ["30", "40", "66"];
+    let zeroNum = "00000";
+    let multiplyNum = [5, 4, 3, 2, 8, 7, 6, 5, 4, 3, 2];
+
+    // 計算 Y
+    if (
+        (subject === "20" || (bankCode >= "001" && bankCode <= "007")) &&
+        validSubject.includes(subject)
+    ) {
+        AC = zeroNum + AC.substring(5, 11);
+
+        let y = 0;
+        for (let i = 0; i < 11; i++) {
+            y += parseInt(AC[i]) * multiplyNum[i];
+        }
+        let x = y % 11;
+        let z = x === 0 ? 1 : x === 1 ? 0 : 11 - x;
+
+        AC += z.toString();
+        return AC;
+    } else {
+        let y = 0;
+        for (let i = 0; i < 11; i++) {
+            y += parseInt(AC[i]) * multiplyNum[i];
+        }
+        let x = y % 11;
+        let z = x === 0 ? 1 : x === 1 ? 0 : 11 - x;
+
+        AC += z.toString();
+        return AC;
+    }
+}
