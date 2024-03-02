@@ -28,3 +28,50 @@ result:(?為計算出的檢查碼)
 001501234585
 
 要如何寫程式碼?
+以下為原本的程式碼
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>帳號檢核</title>
+    <link rel="stylesheet" href="./02-jQuery.css" />
+  </head>
+  <body>
+    <h1>帳號產生程式</h1>
+    <section id="pink">
+      <!-- elevenAccount (11碼) -->
+      <div class="elevenNum">
+        <label for="startAccount">起始帳號：</label>
+        <input type="text" id="startAccount" name="startAccount" required />
+      </div>
+
+      <!-- amount (數量) -->
+      <div class="amount">
+        <label for="accountCount">帳號數：</label>
+        <input
+          type="number"
+          id="accountCount"
+          name="accountCount"
+          min="1"
+          max="9999"
+          required
+        />
+      </div>
+
+      <button class="btn" type="submit">產生帳號</button>
+    </section>
+
+    <!-- <h3>產生帳號如下:</h3> -->
+    <div id="result"></div>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.js"
+      integrity="sha512-+k1pnlgt4F1H8L7t3z95o3/KO+o78INEcXTbnoJQ/F2VqDVhWoaiVml/OEHv9HsVgxUaVW+IbiZPUJQfF/YxZw=="
+      crossorigin="anonymous"
+    ></script>
+
+  </body>
+
