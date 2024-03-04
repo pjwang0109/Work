@@ -1,1 +1,236 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>帳號檢核</title>
+    <link rel="stylesheet" href="./02-jQuery.css" />
+  </head>
+  <body>
+    <h1>帳號產生程式</h1>
+    <section id="pink">
+      <!-- elevenAccount (11碼) -->
+      <div class="elevenNum">
+        <label for="startAccount">起始帳號：</label>
+        <input type="text" id="startAccount" name="startAccount" required />
+      </div>
+
+      <!-- amount (數量) -->
+      <div class="amount">
+        <label for="accountCount">帳號數：</label>
+        <input
+          type="number"
+          id="accountCount"
+          name="accountCount"
+          min="1"
+          max="9999"
+          required
+        />
+      </div>
+
+      <button class="btn" type="submit">產生帳號</button>
+    </section>
+
+    <!-- <h3>產生帳號如下:</h3> -->
+    <div id="result"></div>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.js"
+      integrity="sha512-+k1pnlgt4F1H8L7t3z95o3/KO+o78INEcXTbnoJQ/F2VqDVhWoaiVml/OEHv9HsVgxUaVW+IbiZPUJQfF/YxZw=="
+      crossorigin="anonymous"
+    ></script>
+
+    <script>
+      $(document).ready(function () {
+        // Focus 起始帳號的輸入框
+        $("#startAccount").focus();
+
+        let produceID = function () {
+          // 起始帳號
+          let startId = $("#startAccount").val(); // string
+          let startNum = parseInt(startId); // number
+
+          // 分行別
+          let bankCode = startId.substring(0, 3);
+          // console.log(typeof bankCode);
+
+          // 科目
+          let subject = startId.substring(3, 5);
+
+          // 帳號數
+          let amountId = parseInt($("#accountCount").val());
+
+          // 前 5 碼
+          let fiveNum = startId.substring(0, 5);
+          // 11碼中，最後6個數字
+          let lastSixNum = startId.substring(5, 11);
+
+          // 符合輸入的檢核，才能做事
+          // 計算公式: 00240|809876|0  00150|123456|9  來測試
+          // function calc(startId) {
+          //   let validSubject = ["30", "40", "66"];
+          //   let zeroNum = "00000";
+          //   let multiplyNum = [5, 4, 3, 2, 8, 7, 6, 5, 4, 3, 2];
+
+          //   // 計算 Y
+          //   if (
+          //     (subject === "20" || (bankCode >= "001" && bankCode <= "007")) &&
+          //     validSubject.includes(subject)
+          //   ) {
+          //     elevenStr = zeroNum + lastSixNum; // string '00000809876'
+          //     // let elevenInt = parseInt(elevenStr, 10);
+          //     // let newStr = String(elevenInt).padStart(elevenStr.length, "0");
+          //     // elevenInt += 1;
+
+          //     console.log("elevenStr-1:", elevenStr);
+          //     let y = 0;
+          //     for (let i = 0; i < 11; i++) {
+          //       y += parseInt(elevenStr[i]) * multiplyNum[i];
+          //     }
+          //     console.log("1:", y);
+          //     let x = y % 11;
+          //     let z = x === 0 ? 1 : x === 1 ? 0 : 11 - x; // z 目前為 number
+
+          //     // startId 得到 12 碼
+          //     // elevenStr += z.toString();
+          //     console.log("1:", z);
+          //     return z.toString(); //  string 得到 z=0 '00240809876'
+          //   } else {
+          //     let y = 0;
+          //     for (let i = 0; i < 11; i++) {
+          //       y += parseInt(elevenStr[i]) * multiplyNum[i];
+          //     }
+          //     // console.log("2:", y);
+          //     let x = y % 11;
+          //     let z = x === 0 ? 1 : x === 1 ? 0 : 11 - x; // z 目前為 number
+
+          //     // elevenStr += z.toString();
+          //     // console.log("2:", z);
+          //     return z.toString(); //  string 得到 z=9  '00150123456'
+          //   }
+          // }
+
+          // a
+          function calc1(otherInt) {
+            let validSubject = ["30", "40", "66"];
+            let zeroNum = "00000";
+            let multiplyNum = [5, 4, 3, 2, 8, 7, 6, 5, 4, 3, 2];
+
+            // 計算 Y
+
+            elevenStr = zeroNum + lastSixNum; // string '00000809876'
+            // let elevenInt = parseInt(elevenStr, 10);
+            // let newStr = String(elevenInt).padStart(elevenStr.length, "0");
+            // elevenInt += 1;
+
+            console.log("elevenStr-1:", elevenStr);
+            let y = 0;
+            for (let i = 0; i < 11; i++) {
+              y += parseInt(elevenStr[i]) * multiplyNum[i];
+            }
+            console.log("1:", y);
+            let x = y % 11;
+            let z = x === 0 ? 1 : x === 1 ? 0 : 11 - x; // z 目前為 number
+
+            // startId 得到 12 碼
+            // elevenStr += z.toString();
+            console.log("1:", z);
+            return z.toString(); //  string 得到 z=0 '00240809876'
+          }
+
+          // b
+          function calc2(startId) {
+            let multiplyNum = [5, 4, 3, 2, 8, 7, 6, 5, 4, 3, 2];
+
+            // 計算 Y
+            let y = 0;
+            for (let i = 0; i < 11; i++) {
+              y += parseInt(startId[i]) * multiplyNum[i];
+            }
+            // console.log("2:", y);
+            let x = y % 11;
+            let z = x === 0 ? 1 : x === 1 ? 0 : 11 - x; // z 目前為 number
+
+            // elevenStr += z.toString();
+            // console.log("2:", z);
+            return z.toString(); //  string 得到 z=9  '00150123456'
+          }
+
+          // 生成帳號
+          let resultID = "";
+
+          let startInt = parseInt(startId, 10); // 240809876
+
+          let otherInt = parseInt(lastSixNum, 10);
+
+          for (let i = 0; i < amountId; i++) {
+            // console.log("elevenStr-2:", elevenStr);
+
+            let validSubject = ["30", "40", "66"];
+            let zeroNum = "00000";
+            let multiplyNum = [5, 4, 3, 2, 8, 7, 6, 5, 4, 3, 2];
+            if (
+              (subject === "20" || (bankCode >= "001" && bankCode <= "007")) &&
+              validSubject.includes(subject)
+            ) {
+              let otherStr = String(otherInt).padStart(startId.length, "0");
+              otherInt += 1;
+
+              console.log("otherInt:", otherInt);
+              console.log("otherStr:", otherStr);
+              let otherId = calc1(otherInt);
+              resultID += elevenStr + otherId + "<br/>";
+            } else {
+              let elevenStr = String(startInt).padStart(startId.length, "0"); // 00240809876  00240809877
+              startInt += 1; // 240809877 240809878
+              let checkId = calc2(startId);
+              resultID += elevenStr + checkId + "<br/>";
+            }
+
+            // console.log("elevenStr:", elevenStr);
+            // console.log(startInt);
+            // console.log("checkId:", checkId);
+            // console.log("resultID:", resultID);
+          }
+
+          if (!/^\d+$/.test(startId)) {
+            alert("起始帳號需為數字");
+          } else if (amountId > 9999 || amountId < 1) {
+            alert("帳號數錯誤");
+          } else if (
+            !(bankCode >= "001" && bankCode <= "099") ||
+            bankCode === "019"
+          ) {
+            alert("分行別錯誤");
+          } else if (
+            !["10", "20", "30", "40", "50", "51", "66", "77", "88"].includes(
+              subject
+            )
+          ) {
+            alert("科目別錯誤");
+          } else {
+            $("#result").html(resultID);
+          }
+        };
+
+        // else if (startId.length != 11) {
+        //     alert("起始帳號長度錯誤");
+        //   }
+
+        // 按下按鈕 click
+        $(".btn").click(function () {
+          produceID();
+        });
+
+        // 按下 Enter
+        $("body").keypress(function (e) {
+          if (e.which === 13) {
+            produceID();
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
 
