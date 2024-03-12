@@ -1,12 +1,35 @@
-$.ajax({
-  url: "http://localhost:8080/training/res/S010010001",
-  method: "GET",
-  success: function(response) {
-    // 在此處處理回應的資料
-    console.log(response);
-  },
-  error: function(xhr, status, error) {
-    // 在此處處理錯誤
-    console.log(error);
-  }
-});
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AJAX-test</title>
+  </head>
+  <body>
+    <button id="btn">得到資料</button>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.js"
+      integrity="sha512-+k1pnlgt4F1H8L7t3z95o3/KO+o78INEcXTbnoJQ/F2VqDVhWoaiVml/OEHv9HsVgxUaVW+IbiZPUJQfF/YxZw=="
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      $(document).ready(function () {
+        $("#btn").click(function () {
+          $.ajax({
+            url: "http://localhost:8080/training/res/S010010001",
+            method: "GET",
+            success: function (response) {
+              // 回應的資料
+              console.log(response);
+            },
+            error: function (error) {
+              // 錯誤
+              console.log(error);
+            },
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
