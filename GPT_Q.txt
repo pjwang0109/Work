@@ -1,23 +1,38 @@
-$(document).ready(function () {
-  $("#btn").click(function () {
-    $.ajax({
-      dataType: "json",
-      url: "http://localhost:8080/training/res/S010010001",
-      method: "POST",
-      data: JSON.stringify({id: "A123456789"}),
-      success: function (result) {
-        // 回應的資料
-        $(".data").text("成功");
+我有寫一個 html，是datatable的表格，如下
+<table
+        id="myTable"
+        class="table table-striped table-bordered text-center"
+        style="width: 100%"
+      >
+        <thead>
+          <tr>
+            <th class="text-center">身分證字號</th>
+            <th class="text-center">姓名</th>
+            <th class="text-center">電話</th>
+            <th class="text-center">地址</th>
+            <th class="text-center">備註</th>
+          </tr>
+        </thead>
+      </table>
 
-        console.log("成功:", result);
-      },
-      error: function (error) {
-        // 錯誤
-        $(".data").text("失敗");
-        console.log("失敗:", error);
-      },
-    });
-  });
+而我的js如下，要如何使用 ajax 修改程式碼將 API (http://localhost:8080/training/res/S010010001) 的[查詢]資料顯示在 datatable的表格裡，S010010001.java 是[查詢]資料用的，是用java 做
+
+new DataTable("#myTable", {
+  //屬性區塊
+  language: {
+    lengthMenu: "顯示 _MENU_ 項結果",
+    search: "搜尋:",
+    info: "顯示 _START_ 到 _END_ 筆資料，共 _TOTAL_ 項",
+  },
+
+  //ajax區塊
+  
+  // 資料欄位區塊(columns)
+
+   
+  //語言區塊(language)
+  //欄位元素定義區塊(columnDefs)
+  //列元素區塊(rowCallback)
 });
 
 
