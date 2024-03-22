@@ -1,1 +1,31 @@
+new DataTable("#myTable", {
+  //屬性區塊
+  language: {
+    lengthMenu: "顯示 _MENU_ 項結果",
+    search: "搜尋:",
+    info: "顯示 _START_ 到 _END_ 筆資料，共 _TOTAL_ 項",
+  },
+
+  //ajax區塊
+  ajax: {
+    url: 'http://localhost:8080/training/res/S010010001',
+    dataSrc: 'result', // API 回傳資料的屬性名稱
+    data: function(data) {
+      return { id: "A123456789" }; // 傳遞給 API 的參數
+    }
+  },
+  
+  // 資料欄位區塊(columns)
+  columns: [
+    { data: 'number', title: '身分證字號' },
+    { data: 'username', title: '姓名' },
+    { data: 'number', title: '電話' }, // 注意這裡的資料欄位名稱是否正確
+    { data: 'address', title: '地址' },
+    { data: 'memo', title: '備註' }
+  ],
+   
+  //語言區塊(language)
+  //欄位元素定義區塊(columnDefs)
+  //列元素區塊(rowCallback)
+});
 
