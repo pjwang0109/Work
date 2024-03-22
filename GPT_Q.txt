@@ -14,8 +14,10 @@
           </tr>
         </thead>
       </table>
+<button id="queryBtn">查詢資料</button>
 
-而我的js如下，要如何使用 ajax 修改程式碼將 API (http://localhost:8080/training/res/S010010001) 的[查詢]資料顯示在 datatable的表格裡，S010010001.java 是[查詢]資料用的，是用java 做
+而我的js如下，要如何使用 ajax 修改程式碼，當我按下[查詢資料]時，將 API (http://localhost:8080/training/res/S010010001) 的資料顯示在 datatable的表格裡?
+S010010001.java 是[查詢資料]用的，是用java 做出來的
 
 S010010001:
 上行：
